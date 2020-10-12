@@ -39,11 +39,11 @@ print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('
 
 baseline_version = 'v3.4.5.0_baseline'
 
-X_train = pd.read_pickle(f'./data/{baseline_version}/data/binary_X_train.pkl')
-y_train = pd.read_pickle(f'./data/{baseline_version}/data/binary_y_train.pkl')
+X_train = pd.read_pickle(f'data/{baseline_version}/data/binary_X_train.pkl')
+y_train = pd.read_pickle(f'data/{baseline_version}/data/binary_y_train.pkl')
 
-X_test = pd.read_pickle(f'./data/{baseline_version}/data/binary_X_test.pkl')
-y_test = pd.read_pickle(f'./data/{baseline_version}/data/binary_y_test.pkl')
+X_test = pd.read_pickle(f'data/{baseline_version}/data/binary_X_test.pkl')
+y_test = pd.read_pickle(f'data/{baseline_version}/data/binary_y_test.pkl')
 
 x_labels = ['REGION', 'MARKET', 'SERVICE', 'ORIGINALSEVERITY',
             'SUPPRESSESCL', 'CLASSID', 'FMSKEYWORD', 'ALERTNAME', 'ALERTGROUP', 'THRESHOLD',
