@@ -22,18 +22,21 @@ print(device_lib.list_local_devices())
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from sklearn.utils import class_weight
+import datetime
 
-# from datetime import datetime
-homepath = './'
-
+start_time = datetime.datetime.now().replace(microsecond=0)
 from lstm_model.faultalarmclasses_cp4d import *
 from lstm_model.partslib_cp4d import *
+from lstm_model.file_utils import write_dict
 
 print(os.environ.get('HOSTNAME'))
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
+
+metric_dict = {}
+metric_file = os.path.join(current_directory, "metric.json")
 
 """## Load Data, Feature Selection
 - removed drms, nodealias, manager
@@ -430,13 +433,22 @@ with strategy.scope():
     model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=['accuracy', 'Precision', 'Recall'])
 
 # train model
-print(model_version)
-model.summary()
+# print(model_version)
+# model.summary()
 
 # fit model
 # change epochs for longer runs
-history = model.fit(X_tr, y_tr, epochs=100, batch_size=128, callbacks=[tensorboard_callback],
+epochs = 100
+batch_size = 128
+history = model.fit(X_tr, y_tr, epochs=epochs, batch_size=batch_size, callbacks=[tensorboard_callback],
                     validation_data=(X_val, y_val), verbose=1)
+
+# end time
+end_time = datetime.datetime.now().replace(microsecond=0)
+print("processing completed in : " + str(end_time - start_time))
+metric_dict["training_time"] = str(end_time - start_time)
+metric_dict["epochs"] = str(batch_size)
+write_dict(metric_file, metric_dict)
 
 """### PLOT LEARNING CURVE"""
 
@@ -444,6 +456,9 @@ history = model.fit(X_tr, y_tr, epochs=100, batch_size=128, callbacks=[tensorboa
 # v3.5.5.0_baseline_yp_lstm_1 - with added four fields: EQP_P25_COUNT, EQP_P25, HIST_P25_COUNT, HIST_P25
 loss_train = history.history['accuracy']
 loss_val = history.history['val_accuracy']
+metric_dict["train_accuracy"] = str(loss_train)
+metric_dict["val_accuracy"] = str(loss_val)
+
 epochs = history.epoch
 plt.plot(epochs, loss_train, 'g', label='Training Accuracy')
 plt.plot(epochs, loss_val, 'b', label='validation Accuracy')
@@ -452,4 +467,4 @@ plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
 plt.savefig("Epoch_Accuracy.png")
-plt.show()
+# plt.show()
