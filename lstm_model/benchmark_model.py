@@ -33,17 +33,22 @@ print(os.environ.get('HOSTNAME'))
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
 """## Load Data, Feature Selection
 - removed drms, nodealias, manager
 """
 
 baseline_version = 'v3.4.5.0_baseline'
+x_train_path = os.path.join(current_directory, f'data/{baseline_version}/data/binary_X_train.pkl')
+y_train_path = os.path.join(current_directory, f'data/{baseline_version}/data/binary_y_train.pkl')
+x_test_path = os.path.join(current_directory, f'data/{baseline_version}/data/binary_X_test.pkl')
+y_test_path = os.path.join(current_directory, f'data/{baseline_version}/data/binary_y_test.pkl')
 
-X_train = pd.read_pickle(f'./data/{baseline_version}/data/binary_X_train.pkl')
-y_train = pd.read_pickle(f'./data/{baseline_version}/data/binary_y_train.pkl')
-
-X_test = pd.read_pickle(f'./data/{baseline_version}/data/binary_X_test.pkl')
-y_test = pd.read_pickle(f'./data/{baseline_version}/data/binary_y_test.pkl')
+X_train = pd.read_pickle(x_train_path)
+y_train = pd.read_pickle(y_train_path)
+X_test = pd.read_pickle(x_test_path)
+y_test = pd.read_pickle(y_test_path)
 
 x_labels = ['REGION', 'MARKET', 'SERVICE', 'ORIGINALSEVERITY',
             'SUPPRESSESCL', 'CLASSID', 'FMSKEYWORD', 'ALERTNAME', 'ALERTGROUP', 'THRESHOLD',
@@ -69,6 +74,7 @@ sampsize = 0.99
 
 
 ##############
+
 
 def merge_traintest(X_tr, y_tr, X_ts, y_ts):
     # add labels
@@ -187,7 +193,10 @@ EMBEDDING_DIM = 100
 def set_embeddings_index():
     embeddings_index = pd.DataFrame()
     f = open(os.path.join('data/', 'glove.6B.100d.txt'))
+    counter = 0
     for line in f:
+        counter += 1
+        print('reading Embedding' + str(counter))
         values = line.split()
         word = values[0]
         coefs = np.asarray(values[1:], dtype='float32')
@@ -337,7 +346,8 @@ pipeline = Pipeline(steps=[
 
 # create ohe columns for column sorting
 ohe_columns = ohe_col(X_train[x_labels])
-num_columns = len(numeric_df.columns)
+# num_columns = len(numeric_df.columns)
+num_columns = 100
 
 # input shape set here!
 INPUT_SHAPE = len(ohe_columns) + EMBEDDING_DIM + num_columns
