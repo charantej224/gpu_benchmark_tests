@@ -50,7 +50,6 @@ y_train = pd.read_pickle(y_train_path)
 X_test = pd.read_pickle(x_test_path)
 y_test = pd.read_pickle(y_test_path)
 
-
 x_labels = ['REGION', 'MARKET', 'SERVICE', 'ORIGINALSEVERITY',
             'SUPPRESSESCL', 'CLASSID', 'FMSKEYWORD', 'ALERTNAME', 'ALERTGROUP', 'THRESHOLD',
             'TECHNOLOGY', 'BACKHAULACCESSTYPE', 'FREQBAND', 'OEMMARKETVENDOR',
@@ -193,7 +192,7 @@ EMBEDDING_DIM = 100
 
 def set_embeddings_index():
     embeddings_index = pd.DataFrame()
-    f = open(os.path.join('data/', 'glove.6B.100d.txt'))
+    f = open(os.path.join(current_directory, 'data/glove.6B.100d.txt'))
     counter = 0
     for line in f:
         counter += 1
@@ -261,11 +260,11 @@ def ohe_col(df):
 
     processed_columns = list(df_processed.columns[:])
 
-    with open(homepath + './ohe_dummies.txt', 'w') as filehandle:
+    with open(current_directory + './ohe_dummies.txt', 'w') as filehandle:
         for listitem in cat_dummies:
             filehandle.write('%s\n' % listitem)
 
-    with open(homepath + './ohe_columns.txt', 'w') as filehandle:
+    with open(current_directory + './ohe_columns.txt', 'w') as filehandle:
         for listitem in processed_columns:
             filehandle.write('%s\n' % listitem)
 
@@ -277,7 +276,7 @@ def ohe_xfrm(df):
     ohe_dummies = []
 
     # open file and read the content in a list
-    with open(homepath + './ohe_dummies.txt', 'r') as filehandle:
+    with open(current_directory + './ohe_dummies.txt', 'r') as filehandle:
         for line in filehandle:
             # remove linebreak which is the last character of the string
             currentPlace = line[:-1]
@@ -285,7 +284,7 @@ def ohe_xfrm(df):
             ohe_dummies.append(currentPlace)
 
     # open file and read the content in a list
-    with open(homepath + './ohe_columns.txt', 'r') as filehandle:
+    with open(current_directory + './ohe_columns.txt', 'r') as filehandle:
         for line in filehandle:
             # remove linebreak which is the last character of the string
             currentPlace = line[:-1]
@@ -402,7 +401,7 @@ print(f"******** class_weight type is {type(class_weights)}, its value is {class
 model_version = 'vx.x.0.x_ll'
 
 # setup callbacks for logging or checkpoints
-callback_filepath = homepath + '/log/' + model_version
+callback_filepath = current_directory + '/log/' + model_version
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=callback_filepath, write_graph=False)
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=callback_filepath, save_weights_only=True,
                                                                monitor='val_precision', mode='max', save_best_only=True)
