@@ -440,8 +440,10 @@ with strategy.scope():
 # change epochs for longer runs
 epochs = 100
 batch_size = 128
+print("training started at " + str(datetime.datetime.now().replace(microsecond=0)))
 history = model.fit(X_tr, y_tr, epochs=epochs, batch_size=batch_size, callbacks=[tensorboard_callback],
                     validation_data=(X_val, y_val), verbose=1)
+print("training ended at " + str(datetime.datetime.now().replace(microsecond=0)))
 
 # end time
 end_time = datetime.datetime.now().replace(microsecond=0)
