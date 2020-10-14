@@ -263,11 +263,11 @@ def ohe_col(df):
 
     processed_columns = list(df_processed.columns[:])
 
-    with open(current_directory + './ohe_dummies.txt', 'w') as filehandle:
+    with open(current_directory + 'ohe_dummies.txt', 'w') as filehandle:
         for listitem in cat_dummies:
             filehandle.write('%s\n' % listitem)
 
-    with open(current_directory + './ohe_columns.txt', 'w') as filehandle:
+    with open(current_directory + 'ohe_columns.txt', 'w') as filehandle:
         for listitem in processed_columns:
             filehandle.write('%s\n' % listitem)
 
@@ -279,7 +279,7 @@ def ohe_xfrm(df):
     ohe_dummies = []
 
     # open file and read the content in a list
-    with open(current_directory + './ohe_dummies.txt', 'r') as filehandle:
+    with open(current_directory + 'ohe_dummies.txt', 'r') as filehandle:
         for line in filehandle:
             # remove linebreak which is the last character of the string
             currentPlace = line[:-1]
@@ -287,7 +287,7 @@ def ohe_xfrm(df):
             ohe_dummies.append(currentPlace)
 
     # open file and read the content in a list
-    with open(current_directory + './ohe_columns.txt', 'r') as filehandle:
+    with open(current_directory + 'ohe_columns.txt', 'r') as filehandle:
         for line in filehandle:
             # remove linebreak which is the last character of the string
             currentPlace = line[:-1]
