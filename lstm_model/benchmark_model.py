@@ -425,7 +425,7 @@ with strategy.scope():
     emb = Embedding(num_words, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQUENCE_LENGTH,
                     trainable=False)(nlp_input)
     # nlp_out = LSTM(128, dropout=0.3, recurrent_dropout=0.3)(emb)
-    nlp_out = LSTM(128, dropout=0.3)(emb)
+    nlp_out = LSTM(64, dropout=0.3)(emb)
     x = concatenate([nlp_out, meta_input])
     x = Dense(83, activation='relu')(x)
     x = Dropout(0.3)(x)
@@ -440,7 +440,7 @@ with strategy.scope():
 # fit model
 # change epochs for longer runs
 epochs = 100
-batch_size = 128
+batch_size = 64
 print("training started at " + str(datetime.datetime.now().replace(microsecond=0)))
 history = model.fit(X_tr, y_tr, epochs=epochs, batch_size=batch_size, callbacks=[tensorboard_callback],
                     validation_data=(X_val, y_val), verbose=1)
