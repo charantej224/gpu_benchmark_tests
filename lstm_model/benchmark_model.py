@@ -424,7 +424,8 @@ with strategy.scope():
 
     emb = Embedding(num_words, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQUENCE_LENGTH,
                     trainable=False)(nlp_input)
-    nlp_out = LSTM(128, dropout=0.3, recurrent_dropout=0.3)(emb)
+    # nlp_out = LSTM(128, dropout=0.3, recurrent_dropout=0.3)(emb)
+    nlp_out = LSTM(128, dropout=0.3)(emb)
     x = concatenate([nlp_out, meta_input])
     x = Dense(83, activation='relu')(x)
     x = Dropout(0.3)(x)
