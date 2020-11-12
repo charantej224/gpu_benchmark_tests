@@ -1,1 +1,4 @@
 /lstm_model/data/
+output.log
+/lstm_model/__pycache__/
+/lstm_model/log/
